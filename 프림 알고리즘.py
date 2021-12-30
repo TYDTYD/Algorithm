@@ -21,18 +21,14 @@ def Prim(graph,start):
     h=[]
     heapq.heappush(h,(0,start)) # 우선순위 큐에 시작점 입력
     while Q:
-        u=deleteMin(h) # 인접 정점 중 가장 가중치가 작은 정점 반환
+        w,u=heapq.heappop(h) # 인접 정점 중 가장 가중치가 작은 정점 반환
+        if u not in Q:
+            continue
+        Q.remove(u)
         for i in graph[u]: # 인접 정점 순환하기
             if i[0] in Q and i[1]<d[i[0]]: # 가중치가 더 작다면
                 d[i[0]]=i[1] # 가중치 갱신
                 heapq.heappush(h,(i[1],i[0])) # 우선순위 큐에 입력
     return sum(d) # 최소신장트리의 모든 가중치 반환
-
-def deleteMin(heap):
-    m=heapq.heappop(heap) # 가중치 가장 작은 정점 반환
-    while(m[1] not in Q): # Q에 없는 정점을 반환할 경우(갱신당해 제외된 값이 남았을 경우)
-        m=heapq.heappop(heap) # Q에 값이 있을때까지 제거
-    Q.remove(m[1]) # 최소 신장 트리에 들어갈 정점 제거
-    return m[1]
 
 print(Prim(graph,0))
