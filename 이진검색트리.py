@@ -1,69 +1,103 @@
-# 이진 탐색트리의 구현
-class Node:
-    def __init__(self, value):
-        self.value = value
-        self.leftChild = None
-        self.rightChild = None
+# 노드 구현
+class Node(object):
+    def __init__(self,data):
+        self.left = None
+        self.right = None
+        self.data = data
 
-class BinarySearchTree:
+# 이진트리 구현
+class BinarySearchTree(object):
     def __init__(self):
         self.root = None
 
-    def setRoot(self, value):
-        self.root = Node(value)
+    def insert(self, data):
+        self.root=self._insert_value(self.root,data)
+        return self.root is not None
 
-# 이진탐색트리 탐색
-    def find(self, value):
-        if (self.findNode(self.root, value) is False):
-            return False
+    def _insert_value(self, node, data):
+        if node is None:
+            node = Node(data)
         else:
-            return True
-
-    def findNode(self, currentNode, value):
-        if (currentNode is None):
-            return False
-        elif (value == currentNode.value):
-            return currentNode
-        elif (value < currentNode.value):
-            return self.findNode(currentNode.leftChild, value)
-        else:
-            return self.findNode(currentNode.rightChild, value)
-
-# 이진 탐색트리 삽입
-    def insert(self, value):
-        if (self.root is None):
-            self.setRoot(value)
-        else:
-            self.insertNode(self.root, value)
-
-    def insertNode(self, currentNode, value):
-        if (value <= currentNode.value):
-            if (currentNode.leftChild):
-                self.insertNode(currentNode.leftChild, value)
+            if data <= node.data:
+                node.left = self._insert_value(node.left, data)
             else:
-                currentNode.leftChild = Node(value)
-        elif (value > currentNode.value):
-            if (currentNode.rightChild):
-                self.insertNode(currentNode.rightChild, value)
+                node.right = self._insert_value(node.right, data)
+        return node
+    
+    def find(self, key):
+        return self._find_value(self.root, key)
+
+    def _find_value(self, root, key):
+        if root is None or root.data == key:
+            return root is not None
+        elif key < root.data:
+            return self._find_value(root.left, key)
+        else:
+            return self._find_value(root.right, key)
+
+    def delete(self, key):
+        self.root, deleted = self._delete_value(self.root, key)
+        return deleted
+
+    def _delete_value(self, node, key):
+        if node is None:
+            return node, False
+
+        deleted = False
+        if key == node.data:
+            deleted = True
+            if node.left and node.right:
+                # replace the node to the leftmost of node.right
+                parent, child = node, node.right
+                while child.left is not None:
+                    parent, child = child, child.left
+                child.left = node.left
+                if parent != node:
+                    parent.left = child.right
+                    child.right = node.right
+                node = child
+            elif node.left or node.right:
+                node = node.left or node.right
             else:
-                currentNode.rightChild = Node(value)
+                node = None
+        elif key < node.data:
+            node.left, deleted = self._delete_value(node.left, key)
+        else:
+            node.right, deleted = self._delete_value(node.right, key)
+        return node, deleted
 
-    def traverse(self):
-        return self.traverseNode(self.root)
+# 전위 순회
+    def PreOrder(self, root):
+        if root is None:
+            pass
+        else:
+            print(root.data,end=' ')
+            self.PreOrder(root.left)
+            self.PreOrder(root.right)
 
-    def traverseNode(self, currentNode):
-        result = []
-        if (currentNode.leftChild is not None):
-            result.extend(self.traverseNode(currentNode.leftChild))
-        if (currentNode is not None):
-            result.extend([currentNode.value])
-        if (currentNode.rightChild is not None):
-            result.extend(self.traverseNode(currentNode.rightChild))
-        return result
+# 후위 순회
+    def PostOrder(self, root):
+        if root is None:
+            pass
+        else:
+            self.PostOrder(root.left)
+            self.PostOrder(root.right)
+            print(root.data,end=' ')
 
-a=Node(1)
-b=Node(2)
-Tree=BinarySearchTree()
-Tree.insert(a)
-Tree.insert(b)
-print(Tree.traverse())
+# 중위 순회
+    def InOrder(self, root):
+        if root is None:
+            pass
+        else:
+            self.InOrder(root.left)
+            print(root.data,end=' ')
+            self.InOrder(root.right)
+
+
+array = [40, 4, 34, 45, 14, 55, 48, 13, 15, 49, 47]
+
+bst = BinarySearchTree()
+for x in array:
+    bst.insert(x)
+
+bst.InOrder(bst.root)
