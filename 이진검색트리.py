@@ -56,7 +56,14 @@ class BinarySearchTree:
         if (currentNode.leftChild is not None):
             result.extend(self.traverseNode(currentNode.leftChild))
         if (currentNode is not None):
-            result.extend([currentNode.val])
+            result.extend([currentNode.value])
         if (currentNode.rightChild is not None):
             result.extend(self.traverseNode(currentNode.rightChild))
         return result
+
+a=Node(1)
+b=Node(2)
+Tree=BinarySearchTree()
+Tree.insert(a)
+Tree.insert(b)
+print(Tree.traverse())
