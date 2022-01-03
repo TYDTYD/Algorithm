@@ -24,18 +24,6 @@ def bellmanford(graph,start):
 
 cycle=bellmanford(graph,start)
 
-#for i in range(n): #음의 사이클 판단
-#    if distance[i]==INF: #시작 정점과 닿지 않은 점들
-#        continue
-#    for j in graph[i]:
-#        for k in graph[j[0]]:
-#            if k[0]==i:
-#                if distance[i]>distance[j[0]]+k[1]:
-#                    detect=True
-#                    print(-1)
-#                    exit(0)
-
-
 if cycle==False:
     for i in range(2,n+1):# 시작하는 값 제외
         if distance[i]==INF:
