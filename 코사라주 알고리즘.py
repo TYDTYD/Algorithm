@@ -29,7 +29,7 @@ for i in range(e):
     graphR[b].append(a)
 
 for i in range(1,v+1):
-    if visited[i] is not True:
+    if not visited[i]:
         dfs(i,visited,stack)
 
 visited=[False]*(v+1)
@@ -38,15 +38,11 @@ answer=[]
 while stack:
     scc=[]
     point=stack.pop()
-    if visited[point] is not True:
+    if not visited[point]:
         dfsR(point,visited,scc)
         answer.append(sorted(scc))
 
-answer.sort(key=lambda x:x)
 print(len(answer))
 for i in range(len(answer)):
-    for j in range(len(answer[i])+1):
-        if j==len(answer[i]):
-            print(-1)
-        else:
-            print(answer[i][j],end=' ')
+    for j in range(len(answer[i])):
+        print(answer[i][j],end=' ')
